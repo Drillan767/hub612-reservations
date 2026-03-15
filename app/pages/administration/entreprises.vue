@@ -13,6 +13,7 @@ const selectedCompany = ref<Company>()
 const loading = ref(false)
 const showCreateForm = ref(false)
 const showEditForm = ref(false)
+const showDeleteDialog = ref(false)
 
 const fetch = async() => {
     loading.value = true
@@ -29,6 +30,27 @@ const fetch = async() => {
 const edit = (c: Company) => {
     selectedCompany.value = c
     showEditForm.value = true
+}
+
+const showDelete = (c: Company) => {
+    selectedCompany.value = c
+    showDeleteDialog.value = true
+};
+
+const deleteCompany = async() => {
+    if (!selectedCompany.value) return
+    loading.value = true
+
+    try {
+        await pb.collection('companies').delete(selectedCompany.value.id)
+        selectedCompany.value = undefined
+        showDeleteDialog.value = false
+        await fetch()
+    } catch (e) {
+        console.log({ e })
+    } finally {
+        loading.value = false
+    }
 }
 
 const getThumbnail = (c: Company) => {
@@ -88,6 +110,7 @@ onMounted(fetch)
 
         <VDataTable
             :headers
+            :loading
             :items="companies"
         >
             <template #item.mensual_credits="{ item }">
@@ -119,6 +142,7 @@ onMounted(fetch)
                     color="error"
                     icon="mdi-trash-can-outline"
                     size="small"
+                    @click="showDelete(item)"
                 />
             </template>
         </VDataTable>
@@ -133,4 +157,35 @@ onMounted(fetch)
             @success="fetch"
         />
     </VContainer>
+    <VDialog
+        v-if="selectedCompany"
+        v-model="showDeleteDialog"
+        width="600"
+    >
+        <VCard
+            :title="`Supprimer ${selectedCompany.name} ?`"
+        >
+            <template #text>
+                Cette est irréversible, et tous les utilisateurs liés à cette société
+                se retrouveront marqués comme appartenant à aucune société. <br />
+                Continuer ?
+            </template>
+
+            <template #actions>
+                <VSpacer />
+                <VBtn
+                    class="mr-1"
+                    @click="showDeleteDialog = false"
+                >
+                    Annuler
+                </VBtn>
+                <VBtn
+                    color="error"
+                    @click="deleteCompany"
+                >
+                    Supprimer
+                </VBtn>
+            </template>
+        </VCard>
+    </VDialog>
 </template>

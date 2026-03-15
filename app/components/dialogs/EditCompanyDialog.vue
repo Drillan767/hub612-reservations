@@ -57,7 +57,7 @@ const submit = async () => {
     <VDialog
         v-model="open"
         :fullscreen="mobile"
-        max-width="960px"
+        max-width="700px"
         scrollable
     >
          <VCard

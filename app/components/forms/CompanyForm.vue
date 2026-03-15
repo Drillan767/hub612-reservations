@@ -98,7 +98,7 @@ defineExpose({
             <VRow>
                 <VCol
                     cols="12"
-                    md="10"
+                    md="9"
                 >
                    <p class="text-body-large my-1 font-weight-bold">
                         Crédits mensuels
@@ -110,7 +110,7 @@ defineExpose({
                 </VCol>
                 <VCol
                     cols="12"
-                    md="2"
+                    md="3"
                 >
                      <VNumberInput
                         v-bind="creditsProps"
