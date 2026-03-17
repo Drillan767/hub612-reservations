@@ -5,6 +5,7 @@ const layoutName = computed(() => {
     switch (route.name) {
         case 'inscription':
         case 'connexion':
+        case 'post-register':
             return 'auth'
         default:
             return undefined

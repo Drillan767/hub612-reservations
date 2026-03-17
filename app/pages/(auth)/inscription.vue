@@ -48,6 +48,8 @@ const register = handleSubmit(async(form) => {
             passwordConfirm: form.passwordRepeat,
             emailVisibility: true,
         })
+
+        navigateTo('/post-register')
     } catch (e) {
         console.log({ e })
     } finally {
