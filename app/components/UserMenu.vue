@@ -26,7 +26,13 @@ const logout = () => {
                 icon
             >
                 <VAvatar
+                    v-if="avatar"
                     :image="avatar"
+                />
+                <VIcon
+                    v-else
+                    icon="mdi-account"
+                    color="red"
                 />
             </VBtn>
         </template>

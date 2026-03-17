@@ -16,12 +16,14 @@ const auth = useAuth()
                     class="logo"
                     width="60"
                 />
+
             </NuxtLink>
         </template>
         <template #append>
-            <UserMenu v-if="auth.isAuthenticated" />
+            <UserMenu v-if="auth.isAuthenticated.value" />
             <VBtn
                 v-else
+                color="red"
                 icon="mdi-account"
                 to="/connexion"
             />
