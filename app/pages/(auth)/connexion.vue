@@ -8,10 +8,10 @@ interface Form {
     password: string
 }
 
-const { defineField, handleSubmit } = useForm<Form>({
+const { defineField, handleSubmit, setErrors } = useForm<Form>({
     validationSchema: {
         email: 'required|email',
-        password: 'required|min:8',
+        password: 'required',
     }
 })
 
@@ -28,10 +28,15 @@ const login = handleSubmit(async (form) => {
     loading.value = true
 
     try {
-        pb.collection('users').authWithPassword(form.email, form.password)
+        await pb.collection('users').authWithPassword(form.email, form.password)
         navigateTo('/')
     } catch (e) {
-        console.log({ e })
+        if (e.response.status === 403) {
+            setErrors({ password: 'Votre compte n\'est pas actif' })
+        } else {
+            setErrors({ password: 'Identifiant / Mot de passe incorrect' })
+        }
+
     } finally {
         loading.value = false
     }

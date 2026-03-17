@@ -32,6 +32,14 @@ func main() {
 		return se.Next()
 	})
 
+	app.OnRecordAuthWithPasswordRequest().BindFunc(func(e *core.RecordAuthWithPasswordRequestEvent) error {
+		if !e.Record.GetBool("verified") {
+			return apis.NewForbiddenError("Your account is not verified.", nil)
+		}
+
+		return e.Next()
+	})
+
 	if err := app.Start(); err != nil {
 		log.Fatal(err)
 	}

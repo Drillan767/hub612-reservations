@@ -1,5 +1,19 @@
 <script setup lang="ts">
+import { usePocketBase } from '~/composable/pocketbase'
 
+const pb = usePocketBase()
+
+const total = ref(0)
+
+const fetch = async() => {
+    const result = await pb.collection('users').getList(0, -1, {
+        filter: 'verified = false',
+    })
+
+    total.value = result.totalItems
+}
+
+onMounted(fetch)
 </script>
 
 <template>
@@ -13,12 +27,19 @@
                 cols="12"
                 md="4"
             >
-                <VCard
-                    prepend-icon="mdi-account-group"
-                    title="Gérer les utilisateurs"
-                    to="/administration/utilisateurs"
-                    text="Validez et gérez les utilisateurs, et assignez les à leur entreprise"
-                />
+                <VBadge
+                    :model-value="total > 0"
+                    :content="total"
+                    color="red"
+                    max="9"
+                >
+                    <VCard
+                        prepend-icon="mdi-account-group"
+                        title="Gérer les utilisateurs"
+                        to="/administration/utilisateurs"
+                        text="Validez et gérez les utilisateurs, et assignez les à leur entreprise"
+                    />
+                </VBadge>
             </VCol>
             <VCol
                 cols="12"
