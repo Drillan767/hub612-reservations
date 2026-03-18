@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Company } from '~/types/companies';
+
+definePageMeta({ middleware: 'admin' })
 import { usePocketBase } from '~/composable/pocketbase';
 import CreateCompanyDialog from '~/components/dialogs/CreateCompanyDialog.vue';
 import EditCompanyDialog from '~/components/dialogs/EditCompanyDialog.vue';

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { usePocketBase } from '~/composable/pocketbase'
 
+definePageMeta({ middleware: 'admin' })
+
 const pb = usePocketBase()
 
 const total = ref(0)

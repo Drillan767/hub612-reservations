@@ -25,6 +25,9 @@ export default defineNuxtConfig({
                 VFileInput: {
                     variant: 'outlined',
                 },
+                VAutocomplete: {
+                    variant: 'outlined',
+                },
                 VDataTable: {
                     rounded: 'xl',
                     mobileBreakpoint: 'sm',
