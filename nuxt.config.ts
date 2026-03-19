@@ -6,6 +6,15 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
 
+    app: {
+        head: {
+            title: 'Hub 612 - Réservations',
+            htmlAttrs: {
+                lang: 'fr',
+            },
+        },
+    },
+
     modules: [
       '@nuxt/eslint',
       '@nuxt/image',
@@ -26,6 +35,9 @@ export default defineNuxtConfig({
                     variant: 'outlined',
                 },
                 VAutocomplete: {
+                    variant: 'outlined',
+                },
+                VTextarea: {
                     variant: 'outlined',
                 },
                 VDataTable: {

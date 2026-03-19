@@ -3,6 +3,7 @@ import type { User } from '~/types/users'
 import type { Company } from '~/types/companies'
 import { vuetifyConfig } from '~/composable/vuetifyConfig'
 import { usePocketBase } from '~/composable/pocketbase'
+import CreateCompanyDialog from '../dialogs/CreateCompanyDialog.vue'
 
 interface Form {
     firstName: string
@@ -22,9 +23,10 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
 const pb = usePocketBase()
+
 const companies = ref<Company[]>([])
+const openDialog = ref(false)
 
 const loadCompanies = async () => {
     companies.value = await pb.collection<Company>('companies').getFullList()
@@ -35,11 +37,12 @@ onMounted(loadCompanies)
 const passwordValidation = props.isEdit ? '' : 'required|min:8'
 const passwordConfirmValidation = props.isEdit ? '' : 'required|confirmed:@password'
 
-const { defineField, resetForm: resetVeeForm, controlledValues } = useForm<Form>({
+const { defineField, resetForm, controlledValues } = useForm<Form>({
     validationSchema: {
         firstName: 'required',
         lastName: 'required',
         email: 'required|email',
+        company: 'required',
         password: passwordValidation,
         passwordConfirm: passwordConfirmValidation,
         credits: 'minValue:0',
@@ -69,10 +72,6 @@ const [verified, verifiedProps] = defineField('verified', vuetifyConfig)
 
 const formValid = useIsFormValid()
 
-const resetForm = () => {
-    resetVeeForm()
-}
-
 defineExpose({
     resetForm,
     values: controlledValues,
@@ -84,14 +83,20 @@ defineExpose({
     <VForm>
         <VContainer>
             <VRow>
-                <VCol cols="12" md="6">
+                <VCol
+                    cols="12"
+                    md="6"
+                >
                     <VTextField
                         v-bind="firstNameProps"
                         v-model="firstName"
                         label="Prénom"
                     />
                 </VCol>
-                <VCol cols="12" md="6">
+                <VCol
+                    cols="12"
+                    md="6"
+                >
                     <VTextField
                         v-bind="lastNameProps"
                         v-model="lastName"
@@ -110,7 +115,10 @@ defineExpose({
                 </VCol>
             </VRow>
             <VRow>
-                <VCol cols="12" md="6">
+                <VCol
+                    cols="12"
+                    md="6"
+                >
                     <VTextField
                         v-bind="passwordProps"
                         v-model="password"
@@ -118,7 +126,10 @@ defineExpose({
                         type="password"
                     />
                 </VCol>
-                <VCol cols="12" md="6">
+                <VCol
+                    cols="12"
+                    md="6"
+                >
                     <VTextField
                         v-bind="passwordConfirmProps"
                         v-model="passwordConfirm"
@@ -137,14 +148,32 @@ defineExpose({
                         item-value="id"
                         label="Entreprise"
                         clearable
-                    />
+                    >
+                        <template #append>
+                            <VBtn
+                                icon="mdi-plus"
+                                variant="flat"
+                                color="red"
+                                @click="openDialog = true"
+                            />
+                        </template>
+                    </VAutocomplete>
                 </VCol>
             </VRow>
             <VRow>
-                <VCol cols="12" md="4" class="d-flex align-center">
-                    <p class="text-body-1 font-weight-bold">Crédits</p>
+                <VCol
+                    cols="12"
+                    md="4"
+                    class="d-flex align-center"
+                >
+                    <p class="text-body-1 font-weight-bold">
+                        Crédits
+                    </p>
                 </VCol>
-                <VCol cols="12" md="8">
+                <VCol
+                    cols="12"
+                    md="8"
+                >
                     <VNumberInput
                         v-bind="creditsProps"
                         v-model="credits"
@@ -175,5 +204,9 @@ defineExpose({
                 </VCol>
             </VRow>
         </VContainer>
+        <CreateCompanyDialog
+            v-model="openDialog"
+            @success="loadCompanies"
+        />
     </VForm>
 </template>

@@ -81,7 +81,7 @@ const emit = defineEmits<(e: 'click') => void>()
             background-color: rgb(235, 29, 58);
             color: rgb(242, 228, 225);
             border-radius: .5rem;
-            padding: 1.22rem 1rem;
+            padding: 1rem 0.8rem;
             cursor: pointer;
         }
     }
